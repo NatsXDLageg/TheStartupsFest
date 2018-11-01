@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <script type="text/javascript" src="res/js/vue.js"></script>
+    <script type="text/javascript" src="res/js/apollo-client.min.js"></script>
+    <script type="text/javascript" src="res/js/vue-apollo.min.js"></script>
+    <script type="text/javascript" src="res/js/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="res/css/w3.css"/>
+    <link rel="stylesheet" href="res/css/app.css"/>
+    <link rel="stylesheet" href="res/css/loader.css"/>
+
+    <title>The Startup Fest!</title>
+</head>
+<body>
+    <div class="w3-bar w3-black">
+        <a href="#" class="w3-bar-item w3-button">StartUps</a>
+        <a href="#" class="w3-bar-item w3-button">Resultados</a>
+    </div>
+    <div class="w3-container w3-padding-16">
+        <div id="startups-list">
+            <div class="w3-container">
+                <h2 class="w3-center">Escolha sua StartUp!</h2>
+            </div>
+            <div v-if="loading" class="loading">Loading&#8230;</div>
+            <div v-for="(startup, i) of allStartups" class="w3-container w3-padding w3-padding-16 w3-col l4 m6 s12">
+                <a href="#" class="link-no-underline" v-on:click="onItemClick(i)">
+                <div class="w3-card-2 padding-card w3-center app-background-lightgray">
+                    <img v-bind:src="startup.imageUrl" class="card-img"/>
+                    <div class="w3-panel card-title">{{startup.name}}</div>
+                    <div class="card-subtitle">{{startup.Segment.name}}</div>
+                </div>
+                </a>
+            </div>
+
+            <div v-if="selected" class="w3-modal w3-show" v-on:click="hideItemDetails">
+                <div class="w3-modal-content" v-on:click="onDetailsScreenClick">
+                    {{selected.name}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const apolloClient = new Apollo.lib.ApolloClient({
+            networkInterface: Apollo.lib.createNetworkInterface({
+                uri: 'https://startups-project-mytvsxrgeb.now.sh',
+                transportBatching: true
+            }),
+            connectToDevTools: true,
+        })
+
+        const apolloProvider = new VueApollo.ApolloProvider({
+            defaultClient: apolloClient,
+        })
+
+        var startupsList = new Vue({
+            el: '#startups-list',
+            data: {
+                allStartups: [],
+                loading: 0,
+                selected: null
+            },
+            apolloProvider,
+            apollo: {
+                allStartups: {
+                    query: Apollo.gql`{
+                        allStartups {
+                            name
+                            teamCount
+                            description
+                            imageUrl
+                            annualReceipt
+                            Segment {
+                                name
+                                code
+                            }
+                        }
+                    }`,
+                    loadingKey: 'loading',
+                },
+            },
+            methods: {
+                onItemClick: function(index) {
+                    this.selected = this.allStartups[index];
+                },
+                hideItemDetails: function() {
+                    this.selected = null;
+                },
+                onDetailsScreenClick: function() {
+                    event.stopPropagation();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

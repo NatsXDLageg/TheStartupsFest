@@ -1,0 +1,40 @@
+.app-background-lightgray {
+    background-color: rgb(247, 246, 246);
+}
+
+@font-face {
+    font-family: Quinfo;
+    src: url("../fonts/quinfo.otf") format("opentype");
+}
+
+@font-face {
+    font-family: Quinfo;
+    font-weight: bold;
+    src: url("../fonts/quinfobold.otf") format("opentype");
+}
+
+@font-face {
+    font-family: QuinfoLight;
+    src: url("../fonts/quinfoextralight.otf") format("opentype");
+}
+
+body, h1, h2, h3, h4, h5, h6, p {
+    font-family: Roboto !important;
+}
+
+.padding-card {
+    padding: 32px;
+}
+.card-img {
+    width: 80%;
+    border-radius: 4px;
+}
+.card-title {
+    font-size: 24px;
+}
+.card-subtitle {
+    font-size: 16px;
+}
+.link-no-underline {
+    text-decoration: none;
+}
