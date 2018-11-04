@@ -24,7 +24,7 @@
                 <h2 class="w3-center">Escolha sua StartUp!</h2>
             </div>
             <div v-if="loading" class="loading">Loading&#8230;</div>
-            <div v-for="(startup, i) of allStartups" class="w3-container w3-padding w3-padding-16 w3-col l4 m6 s12">
+            <div v-for="(startup, i) of allStartups" class="w3-container w3-padding w3-padding-16 w3-col l4 m4 s12">
                 <a href="#" class="link-no-underline" v-on:click="onItemClick(i)">
                 <div class="w3-card-2 padding-card w3-center app-background-lightgray">
                     <img v-bind:src="startup.imageUrl" class="card-img"/>
@@ -42,56 +42,15 @@
         </div>
     </div>
 
+    <script type="text/javascript" src="res/js/startups-handler.js"></script>
+    <script type="text/javascript" src="res/js/local-storage-handler.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.7/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.7/firebase-database.js"></script>
+    <script type="text/javascript" src="res/js/data-handler.js"></script>
     <script>
-        const apolloClient = new Apollo.lib.ApolloClient({
-            networkInterface: Apollo.lib.createNetworkInterface({
-                uri: 'https://startups-project-mytvsxrgeb.now.sh',
-                transportBatching: true
-            }),
-            connectToDevTools: true,
-        })
-
-        const apolloProvider = new VueApollo.ApolloProvider({
-            defaultClient: apolloClient,
-        })
-
-        var startupsList = new Vue({
-            el: '#startups-list',
-            data: {
-                allStartups: [],
-                loading: 0,
-                selected: null
-            },
-            apolloProvider,
-            apollo: {
-                allStartups: {
-                    query: Apollo.gql`{
-                        allStartups {
-                            name
-                            teamCount
-                            description
-                            imageUrl
-                            annualReceipt
-                            Segment {
-                                name
-                                code
-                            }
-                        }
-                    }`,
-                    loadingKey: 'loading',
-                },
-            },
-            methods: {
-                onItemClick: function(index) {
-                    this.selected = this.allStartups[index];
-                },
-                hideItemDetails: function() {
-                    this.selected = null;
-                },
-                onDetailsScreenClick: function() {
-                    event.stopPropagation();
-                }
-            }
+        $(document).ready(function() {
+            onDocumentReadyLocalStorageInit();
         });
     </script>
 </body>
