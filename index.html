@@ -34,12 +34,46 @@
                 </a>
             </div>
 
-            <div v-if="selected" class="w3-modal w3-show" v-on:click="hideItemDetails">
-                <div class="w3-modal-content" v-on:click="onDetailsScreenClick">
-                    {{selected.name}}
-                    <p v-if="selected.ratings">
-                        {{selected.ratings.pitch}}
-                    </p>
+            <div v-if="selected !== null" class="w3-modal w3-show" v-on:click="hideItemDetails">
+                <div class="w3-modal-content w3-padding w3-padding-16 w3-center" v-on:click="onDetailsScreenClick">
+                    <img id="startupImage" v-bind:src="allStartups[selected].imageUrl"/>
+                    <h3>{{allStartups[selected].name}}</h3>
+                    <h4>{{allStartups[selected].Segment.name}}</h4>
+                    <div id="startUpDescription" class="w3-leftbar w3-left-align">{{allStartups[selected].description}}</div>
+                    <div v-if="allStartups[selected].ratings">
+                        <h3>Proposta</h3>
+                        <div class="w3-container">
+                            <span v-on:click="hideItemDetails" class="w3-button w3-display-topright">&times;</span>
+                            <div class="rating">
+                                <input v-model="allStartups[selected].ratings.proposal" type="radio" id="proposalStar5" name="proposalRating" value="5" v-bind:checked="allStartups[selected].ratings.proposal === 5" v-on:click="onRatingChange(selected, 'proposal')"/><label for="proposalStar5" title="5 estrelas">5 stars</label>
+                                <input v-model="allStartups[selected].ratings.proposal" type="radio" id="proposalStar4" name="proposalRating" value="4" v-bind:checked="allStartups[selected].ratings.proposal === 4" v-on:click="onRatingChange(selected, 'proposal')"/><label for="proposalStar4" title="4 estrelas">4 stars</label>
+                                <input v-model="allStartups[selected].ratings.proposal" type="radio" id="proposalStar3" name="proposalRating" value="3" v-bind:checked="allStartups[selected].ratings.proposal === 3" v-on:click="onRatingChange(selected, 'proposal')"/><label for="proposalStar3" title="3 estrelas">3 stars</label>
+                                <input v-model="allStartups[selected].ratings.proposal" type="radio" id="proposalStar2" name="proposalRating" value="2" v-bind:checked="allStartups[selected].ratings.proposal === 2" v-on:click="onRatingChange(selected, 'proposal')"/><label for="proposalStar2" title="2 estrelas">2 stars</label>
+                                <input v-model="allStartups[selected].ratings.proposal" type="radio" id="proposalStar1" name="proposalRating" value="1" v-bind:checked="allStartups[selected].ratings.proposal === 1" v-on:click="onRatingChange(selected, 'proposal')"/><label for="proposalStar1" title="1 estrela">1 star</label>
+                            </div>
+                        </div>
+
+                        <h3>Apresentação / Pitch</h3>
+                        <div class="w3-container">
+                            <div class="rating">
+                                <input type="radio" id="pitchStar5" name="pitchRating" value="5" v-bind:checked="allStartups[selected].ratings.pitch === 5"/><label for="pitchStar5" title="5 estrelas">5 stars</label>
+                                <input type="radio" id="pitchStar4" name="pitchRating" value="4" v-bind:checked="allStartups[selected].ratings.pitch === 4"/><label for="pitchStar4" title="4 estrelas">4 stars</label>
+                                <input type="radio" id="pitchStar3" name="pitchRating" value="3" v-bind:checked="allStartups[selected].ratings.pitch === 3"/><label for="pitchStar3" title="3 estrelas">3 stars</label>
+                                <input type="radio" id="pitchStar2" name="pitchRating" value="2" v-bind:checked="allStartups[selected].ratings.pitch === 2"/><label for="pitchStar2" title="2 estrelas">2 stars</label>
+                                <input type="radio" id="pitchStar1" name="pitchRating" value="1" v-bind:checked="allStartups[selected].ratings.pitch === 1"/><label for="pitchStar1" title="1 estrela">1 star</label>
+                            </div>
+                        </div>
+
+                        <h3>Desenvolvimento</h3>
+                        <div class="w3-container">
+                            <div class="rating">
+                                <input type="radio" id="developmentStar5" name="developmentRating" value="5" v-bind:checked="allStartups[selected].ratings.development === 5"/><label for="developmentStar5" title="5 estrelas">5 stars</label>
+                                <input type="radio" id="developmentStar4" name="developmentRating" value="4" v-bind:checked="allStartups[selected].ratings.development === 4"/><label for="developmentStar4" title="4 estrelas">4 stars</label>
+                                <input type="radio" id="developmentStar3" name="developmentRating" value="3" v-bind:checked="allStartups[selected].ratings.development === 3"/><label for="developmentStar3" title="3 estrelas">3 stars</label>
+                                <input type="radio" id="developmentStar2" name="developmentRating" value="2" v-bind:checked="allStartups[selected].ratings.development === 2"/><label for="developmentStar2" title="2 estrelas">2 stars</label>
+                                <input type="radio" id="developmentStar1" name="developmentRating" value="1" v-bind:checked="allStartups[selected].ratings.development === 1"/><label for="developmentStar1" title="1 estrela">1 star</label>
+                            </div>
+                        </div>
                 </div>
             </div>
         </div>

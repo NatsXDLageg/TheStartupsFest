@@ -11,4 +11,5 @@ function onDocumentReadyLocalStorageInit() {
     } else {
         // No Web Storage support
     }
+    console.log(userGuid);
 }

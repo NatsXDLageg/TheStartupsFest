@@ -38,3 +38,69 @@ body, h1, h2, h3, h4, h5, h6, p {
 .link-no-underline {
     text-decoration: none;
 }
+
+#startupImage {
+    width: 300px;
+    border-radius: 4px;
+}
+#startUpDescription {
+    font-style: italic;
+    margin: 16px 16px 64px 16px;
+    padding: 1em 16px;
+    border-color: #3f51b5 !important
+}
+
+/*
+//    ___    _ _____ ___ _  _  ___   ___ _____ _   ___  ___   ___ _______   ___    ___ ___
+//   | _ \  /_\_   _|_ _| \| |/ __| / __|_   _/_\ | _ \/ __| / __|_   _\ \ / / |  | __/ __|
+//   |   / / _ \| |  | || .` | (_ | \__ \ | |/ _ \|   /\__ \ \__ \ | |  \ V /| |__| _|\__ \
+//   |_|_\/_/ \_\_| |___|_|\_|\___| |___/ |_/_/ \_\_|_\|___/ |___/ |_|   |_| |____|___|___/
+
+//   Code adapted from http://jsfiddle.net/ashuslove/zLm4f/6/
+*/
+.rating {
+    width: 300px;
+    margin: 0 auto;
+}
+.rating:not(:checked) > input {
+    position:absolute;
+    top:-9999px;
+    clip:rect(0,0,0,0);
+}
+.rating:not(:checked) > label {
+    float:right;
+    width:1em;
+    padding:0 .1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:60px;
+    line-height:1.2;
+    color:#ddd;
+    /*text-shadow:1px 1px #bbb, 2px 2px #666, .1em .1em .2em rgba(0,0,0,.5);*/
+}
+.rating:not(:checked) > label:before {
+    content: '★ ';
+}
+.rating > input:checked ~ label {
+    color: black;
+    /*text-shadow:1px 1px #c60, 2px 2px #940, .1em .1em .2em rgba(0,0,0,.5);*/
+}
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+    color: gray;
+    /*text-shadow:1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);*/
+}
+.rating > input:checked + label:hover,
+.rating > input:checked + label:hover ~ label,
+.rating > input:checked ~ label:hover,
+.rating > input:checked ~ label:hover ~ label,
+.rating > label:hover ~ input:checked ~ label {
+    color: #585858;
+    /*text-shadow:1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);*/
+}
+.rating > label:active {
+    position:relative;
+    top:2px;
+    left:2px;
+}

@@ -26,12 +26,18 @@ function newGuid() {
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 }
 
-function registerRating(userToken, startUpName, type, rating) {
-    let ratingRef = database.ref('ratings/' + startUpName + '/' + type);
-    ratingRef.on('value', function(el) {
-        console.log(ratingRef);
-        console.log(el.val());
-    });
+function registerRating(userToken, startUpIndex) {
+    let startUpName = startUpsList.allStartups[startUpIndex].name;
+
+    let ratingRef = database.ref(encodePath('ratings/' + startUpName + '/' + userToken));
+    console.log(ratingRef);
+
+    let newValue = startUpsList[startUpIndex].ratings;
+    console.log(newValue);
+    // ratingRef.on('value', function(el) {
+    //     console.log(ratingRef);
+    //     console.log(el.val());
+    // });
     // ref.push({
     //     username: name,
     //     email: email,
@@ -40,44 +46,51 @@ function registerRating(userToken, startUpName, type, rating) {
 }
 
 function loadPreviousRatings(userToken, startUpIndex) {
-    // let startUpName = startUp.name;
-    let startUpName = startupsList.allStartups[startUpIndex].name;
+    //If it is needed to retrieve previous ratings for the chosen StartUp
+    if((typeof startUpsList.allStartups[startUpIndex].ratings) === 'undefined') {
+        let startUpName = startUpsList.allStartups[startUpIndex].name;
 
-    //For each rating type
-    // for (var property in RatingType) {
-    //     if (RatingType.hasOwnProperty(property)) {
-    //         let ratingRef = database.ref('ratings/' + startUpName + '/' + userToken);
-    //         ratingRef.on('value', function(el) {
-    //             console.log(ratingRef);
-    //             console.log(el.val());
-    //         });
-    //     }
-    // }
+        startUpsList.loading = 1;
 
-    let ratingRef = database.ref('ratings/' + startUpName + '/' + userToken);
-    ratingRef.on('value', function(el) {
-        let ratings;
-        if(el.val() !== null) {
-            ratings = el.val();
-        }
-        else {
-            ratings = {};
-            for (var property in RatingType) {
-                if (RatingType.hasOwnProperty(property)) {
-                    let propertyValue = RatingType[property];
-                    ratings[propertyValue] = null;
+        let ratingRef = database.ref(encodePath('ratings/' + startUpName + '/' + userToken));
+        ratingRef.on('value', function (el) {
+            let ratings;
+            if (el.val() !== null) {
+                ratings = el.val();
+            }
+            else {
+                ratings = {};
+                for (var property in RatingType) {
+                    if (RatingType.hasOwnProperty(property)) {
+                        let propertyValue = RatingType[property];
+                        ratings[propertyValue] = null;
+                    }
                 }
             }
-        }
-        //TODO: Attempt to create array in Vue root
-        console.log(ratings);
-        // startUp['ratings'] = ratings;
-        // Vue.set(startUp, 'ratings', )
-        Vue.set(startupsList.allStartups[startUpIndex], 'ratings', ratings);
-        // console.log(startUp);
+            let startUpsListCopy = startUpsList.allStartups.slice().map((row, i) => {
+                if (i === startUpIndex) {
+                    return {
+                        ...row,
+                        ratings: ratings
+                    };
+                }
+                else {
+                    return {
+                        ...row
+                    }
+                }
+            });
+            startUpsList.allStartups = startUpsListCopy;
+            startUpsList.selected = startUpIndex;
+            startUpsList.loading = 0;
+        });
+    }
+    //If the ratings were previously loaded
+    else {
+        startUpsList.selected = startUpIndex;
+    }
+}
 
-
-        // startupsList.selected = startUp;
-        return ratings;
-    });
+function encodePath(path) {
+    return encodeURI(path.replace(".", "_"));
 }

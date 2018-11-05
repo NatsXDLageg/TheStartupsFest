@@ -10,7 +10,7 @@ const apolloProvider = new VueApollo.ApolloProvider({
     defaultClient: apolloClient,
 })
 
-var startupsList = new Vue({
+var startUpsList = new Vue({
     el: '#startups-list',
     data: {
         allStartups: [],
@@ -61,6 +61,9 @@ var startupsList = new Vue({
         },
         onDetailsScreenClick: function() {
             event.stopPropagation();
+        },
+        onRatingChange: function(index) {
+            registerRating(userGuid, index);
         }
     }
 });
