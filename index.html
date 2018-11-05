@@ -37,6 +37,9 @@
             <div v-if="selected" class="w3-modal w3-show" v-on:click="hideItemDetails">
                 <div class="w3-modal-content" v-on:click="onDetailsScreenClick">
                     {{selected.name}}
+                    <p v-if="selected.ratings">
+                        {{selected.ratings.pitch}}
+                    </p>
                 </div>
             </div>
         </div>

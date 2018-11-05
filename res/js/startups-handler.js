@@ -46,15 +46,15 @@ var startupsList = new Vue({
     //         }
     //     }
     // },
-    watch: {
-        'selected': function(val, oldVal){
-            //Whenever a StartUp is chosen, loads previous ratings for this StartUp
-            loadPreviousRatings(userGuid, val);
-        }
-    },
+    // watch: {
+    //     'selected': function(val, oldVal){
+    //         //Whenever a StartUp is chosen, loads previous ratings for this StartUp
+    //         loadPreviousRatings(userGuid, val);
+    //     }
+    // },
     methods: {
         onItemClick: function(index) {
-            this.selected = this.allStartups[index];
+            loadPreviousRatings(userGuid, index);
         },
         hideItemDetails: function() {
             this.selected = null;

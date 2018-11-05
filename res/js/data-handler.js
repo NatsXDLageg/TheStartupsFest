@@ -39,8 +39,9 @@ function registerRating(userToken, startUpName, type, rating) {
     // });
 }
 
-function loadPreviousRatings(userToken, startUp) {
-    let startUpName = startUp.name;
+function loadPreviousRatings(userToken, startUpIndex) {
+    // let startUpName = startUp.name;
+    let startUpName = startupsList.allStartups[startUpIndex].name;
 
     //For each rating type
     // for (var property in RatingType) {
@@ -55,7 +56,28 @@ function loadPreviousRatings(userToken, startUp) {
 
     let ratingRef = database.ref('ratings/' + startUpName + '/' + userToken);
     ratingRef.on('value', function(el) {
-        console.log(ratingRef);
-        console.log(el.val());
+        let ratings;
+        if(el.val() !== null) {
+            ratings = el.val();
+        }
+        else {
+            ratings = {};
+            for (var property in RatingType) {
+                if (RatingType.hasOwnProperty(property)) {
+                    let propertyValue = RatingType[property];
+                    ratings[propertyValue] = null;
+                }
+            }
+        }
+        //TODO: Attempt to create array in Vue root
+        console.log(ratings);
+        // startUp['ratings'] = ratings;
+        // Vue.set(startUp, 'ratings', )
+        Vue.set(startupsList.allStartups[startUpIndex], 'ratings', ratings);
+        // console.log(startUp);
+
+
+        // startupsList.selected = startUp;
+        return ratings;
     });
 }
