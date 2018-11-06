@@ -10,12 +10,32 @@ const apolloProvider = new VueApollo.ApolloProvider({
     defaultClient: apolloClient,
 })
 
-var startUpsList = new Vue({
-    el: '#startups-list',
+var results = new Vue({
+    el: '#results',
     data: {
         allStartups: [],
         loading: 0,
-        selected: null
+        ratingTypes: {
+            PROPOSAL: {
+                name: 'Proposta',
+                podium: [
+                    // {
+                    //      imageUrl: '',
+                    //      name: '',
+                    //      segment: '',
+                    //      rating: '',
+                    // }
+                ]
+            },
+            PITCH: {
+                name: 'Apresentação',
+                podium: []
+            },
+            DEVELOPMENT: {
+                name: 'Desenvolvimento',
+                podium: []
+            }
+        }
     },
     apolloProvider,
     apollo: {
@@ -36,19 +56,11 @@ var startUpsList = new Vue({
             loadingKey: 'loading',
         },
     },
-    methods: {
-        onItemClick: function(index) {
-            loadPreviousRatings(userGuid, index);
-        },
-        hideItemDetails: function() {
-            this.selected = null;
-        },
-        onDetailsScreenClick: function() {
-            event.stopPropagation();
-        },
-        onRatingChange: function(index, type, value) {
-            this.allStartups[index].ratings[type] = value;
-            registerRating(userGuid, index);
+    watch: {
+        'allStartups': function(val, oldVal){
+            if(val) {
+                loadRatingPodium();
+            }
         }
     }
-});
+})

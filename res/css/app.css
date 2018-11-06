@@ -29,10 +29,10 @@ body, h1, h2, h3, h4, h5, h6, p {
     width: 80%;
     border-radius: 4px;
 }
-.card-title {
+.card-title, .rating-type-title, .rating-startup-number, .rating-startup-rating {
     font-size: 24px;
 }
-.card-subtitle {
+.card-subtitle, .rating-startup-title {
     font-size: 16px;
 }
 .link-no-underline {
@@ -48,6 +48,13 @@ body, h1, h2, h3, h4, h5, h6, p {
     margin: 16px 16px 64px 16px;
     padding: 1em 16px;
     border-color: #3f51b5 !important
+}
+
+.rating-startup-img {
+    width: 100%;
+}
+.rating-startup-subtitle {
+    font-size: 12px;
 }
 
 /*

@@ -14,9 +14,8 @@
     <title>The Startup Fest!</title>
 </head>
 <body>
-    <div class="w3-bar w3-black">
-        <a href="#" class="w3-bar-item w3-button">StartUps</a>
-        <a href="#" class="w3-bar-item w3-button">Resultados</a>
+    <div id="menu" class="w3-bar w3-black">
+        <a v-for="(menuItem, i) of menuItems" v-bind:href="menuItem.href" v-bind:class="{'w3-bar-item': true, 'w3-button': true, 'w3-dark-grey': menuItem.active}">{{menuItem.name}}</a>
     </div>
     <div class="w3-container w3-padding-16">
         <div id="startups-list">
@@ -74,11 +73,13 @@
                                 <input type="radio" id="developmentStar1" name="developmentRating" value="1" v-bind:checked="allStartups[selected].ratings.development === 1" v-on:click="onRatingChange(selected, 'development', 1)"/><label for="developmentStar1" title="1 estrela">1 star</label>
                             </div>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <script type="text/javascript" src="res/js/menu-handler.js"></script>
     <script type="text/javascript" src="res/js/startups-handler.js"></script>
     <script type="text/javascript" src="res/js/local-storage-handler.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.5.7/firebase.js"></script>
@@ -88,6 +89,8 @@
     <script>
         $(document).ready(function() {
             onDocumentReadyLocalStorageInit();
+
+            menu.menuItems[0].active = true;
         });
     </script>
 </body>

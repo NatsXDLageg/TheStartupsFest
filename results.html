@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <script type="text/javascript" src="res/js/vue.js"></script>
+    <script type="text/javascript" src="res/js/apollo-client.min.js"></script>
+    <script type="text/javascript" src="res/js/vue-apollo.min.js"></script>
+    <script type="text/javascript" src="res/js/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="res/css/w3.css"/>
+    <link rel="stylesheet" href="res/css/app.css"/>
+    <link rel="stylesheet" href="res/css/loader.css"/>
+
+    <title>The Startup Fest! - Resultados</title>
+</head>
+<body>
+    <div id="menu" class="w3-bar w3-black">
+        <a v-for="(menuItem, i) of menuItems" v-bind:href="menuItem.href" v-bind:class="{'w3-bar-item': true, 'w3-button': true, 'w3-dark-grey': menuItem.active}">{{menuItem.name}}</a>
+    </div>
+
+    <div id="results" class="w3-container w3-padding-16">
+        <div class="w3-container">
+            <h2 class="w3-center">Resultados</h2>
+        </div>
+        <div v-if="loading" class="loading">Loading&#8230;</div>
+        <div v-for="(ratingType, i) of ratingTypes">
+            <div class="w3-padding-16 rating-type-title">
+                {{ratingType.name}}
+            </div>
+            <div v-for="(startUpRating, j) of ratingType.podium" class="w3-row-padding w3-margin-bottom w3-col l4 m4 s12">
+                <div class="w3-col s1 rating-startup-number">{{j + 1}}º</div>
+                <div class="w3-col s3"><img v-bind:src="startUpRating.imageUrl" class="rating-startup-img"/></div>
+                <div class="w3-rest">
+                    <div class="rating-startup-title">{{startUpRating.name}}</div>
+                    <div class="rating-startup-subtitle">{{startUpRating.segment}}</div>
+                    <div class="rating-startup-rating">{{startUpRating.rating}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="res/js/menu-handler.js"></script>
+    <script type="text/javascript" src="res/js/result-handler.js"></script>
+    <script type="text/javascript" src="res/js/local-storage-handler.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.7/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.7/firebase-database.js"></script>
+    <script type="text/javascript" src="res/js/data-handler.js"></script>
+    <script>
+        $(document).ready(function() {
+            onDocumentReadyLocalStorageInit();
+
+            menu.menuItems[1].active = true;
+        });
+    </script>
+</body>
+</html>

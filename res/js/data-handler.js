@@ -81,7 +81,7 @@ function loadPreviousRatings(userToken, startUpIndex) {
             else {
                 ratings = {};
             }
-            for (var property in RatingType) {
+            for (let property in RatingType) {
                 if (RatingType.hasOwnProperty(property)) {
                     let propertyValue = RatingType[property];
                     if(typeof ratings[propertyValue] === 'undefined') {
@@ -111,6 +111,79 @@ function loadPreviousRatings(userToken, startUpIndex) {
     else {
         startUpsList.selected = startUpIndex;
     }
+}
+
+function loadRatingPodium() {
+    results.loading = 1;
+    let ratingRef = database.ref('ratings');
+    ratingRef.on('value', function (el) {
+        if (el.val() !== null) {
+            let registeredRatingsInfo = el.val();
+            console.log('registeredRatingsInfo');
+            console.log(registeredRatingsInfo);
+
+            let startUpsInfo = results.allStartups;
+            console.log('startUpsInfo');
+            console.log(startUpsInfo);
+
+            let startUpsWithoutRatings = [];
+
+            //Have to iterate over 3 sets of objects: rating types, rating data from Firebase and data returned by Apollo
+            for(let startUpInfo of startUpsInfo) {
+                let startUp = {
+                    imageUrl: startUpInfo.imageUrl,
+                    name: startUpInfo.name,
+                    segment: startUpInfo.Segment.name
+                };
+                startUpsWithoutRatings.push(startUp);
+            }
+
+            // For:
+            //  Proposal
+            //  Pitch
+            //  Development
+            for(let ratingTypeKey in RatingType) {
+                if (RatingType.hasOwnProperty(ratingTypeKey)) {
+                    let ratingTypeValue = RatingType[ratingTypeKey];
+                    console.log(ratingTypeValue);
+
+                    // For each startUp that have registered ratings
+                    for(let registeredRatingKey in registeredRatingsInfo) {
+                        let registeredRatingValue = registeredRatingsInfo[registeredRatingKey]
+                        let startUp = startUpsWithoutRatings.find(x => encodePath(x.name) === registeredRatingKey);
+
+                        if(startUp != null) {
+                            startUp.rating = 0;
+                            console.log('startUp');
+                            console.log(startUp);
+                            // For each user rating (for all startUps)
+                            for(let registeredUserRatingKey in registeredRatingValue) {
+                                let registeredUserRatingValue = registeredRatingValue[registeredUserRatingKey];
+                                console.log('registeredUserRatingValue');
+                                console.log(registeredUserRatingValue);
+                                startUp.rating = startUp.rating + registeredUserRatingValue[ratingTypeValue];
+                                console.log('startUp.rating');
+                                console.log(startUp.rating);
+                            }
+                        }
+                    }
+
+                    // let newElement = {
+                    //      imageUrl: 'https://www.eaalim.com/download/wp-content/uploads/2014/01/hellfire.jpg',
+                    //      name: 'Nome da Startup',
+                    //      segment: 'Ctgr',
+                    //      rating: 5,
+                    // };
+                    // podiumStartups.push(newElement);
+
+                    console.log(startUpsWithoutRatings);
+                    // results.ratingTypes[property].podium = startUpsWithRatings;
+                }
+            }
+        }
+
+        results.loading = 0;
+    });
 }
 
 function encodePath(path) {
