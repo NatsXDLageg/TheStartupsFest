@@ -62,7 +62,8 @@ var startUpsList = new Vue({
         onDetailsScreenClick: function() {
             event.stopPropagation();
         },
-        onRatingChange: function(index) {
+        onRatingChange: function(index, type, value) {
+            this.allStartups[index].ratings[type] = value;
             registerRating(userGuid, index);
         }
     }

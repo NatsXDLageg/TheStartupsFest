@@ -10,6 +10,7 @@ function onDocumentReadyLocalStorageInit() {
         }
     } else {
         // No Web Storage support
+        // Did not make a exception for this case, because it is so particular
     }
-    console.log(userGuid);
+    // console.log(userGuid);
 }

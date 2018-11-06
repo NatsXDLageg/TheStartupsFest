@@ -27,22 +27,42 @@ function newGuid() {
 }
 
 function registerRating(userToken, startUpIndex) {
-    let startUpName = startUpsList.allStartups[startUpIndex].name;
+    let startUp = startUpsList.allStartups[startUpIndex];
+    let startUpName = startUp.name;
+    let path = encodePath('ratings/' + startUpName + '/' + userToken);
 
-    let ratingRef = database.ref(encodePath('ratings/' + startUpName + '/' + userToken));
-    console.log(ratingRef);
+    let ratingRef = database.ref(path);
 
-    let newValue = startUpsList[startUpIndex].ratings;
-    console.log(newValue);
-    // ratingRef.on('value', function(el) {
-    //     console.log(ratingRef);
-    //     console.log(el.val());
-    // });
-    // ref.push({
-    //     username: name,
-    //     email: email,
-    //     profile_picture : imageUrl
-    // });
+    let rawRatings = startUp.ratings;
+    let newRatings = {};
+    if(rawRatings[RatingType.DEVELOPMENT] === null) {
+        newRatings[RatingType.DEVELOPMENT] = null;
+    }
+    else {
+        newRatings[RatingType.DEVELOPMENT] = parseInt(rawRatings[RatingType.DEVELOPMENT]);
+    }
+    if(rawRatings[RatingType.PITCH] === null) {
+        newRatings[RatingType.PITCH] = null;
+    }
+    else {
+        newRatings[RatingType.PITCH] = parseInt(rawRatings[RatingType.PITCH]);
+    }
+    if(rawRatings[RatingType.PROPOSAL] === null) {
+        newRatings[RatingType.PROPOSAL] = null;
+    }
+    else {
+        newRatings[RatingType.PROPOSAL] = parseInt(rawRatings[RatingType.PROPOSAL]);
+    }
+    startUpsList.loading = 1;
+    ratingRef.set(newRatings)
+        .then(function() {
+            startUpsList.loading = 0;
+            console.log('Synchronization succeeded');
+        })
+        .catch(function(error) {
+            startUpsList.loading = 0;
+            console.log('Synchronization failed');
+        });
 }
 
 function loadPreviousRatings(userToken, startUpIndex) {
@@ -60,9 +80,11 @@ function loadPreviousRatings(userToken, startUpIndex) {
             }
             else {
                 ratings = {};
-                for (var property in RatingType) {
-                    if (RatingType.hasOwnProperty(property)) {
-                        let propertyValue = RatingType[property];
+            }
+            for (var property in RatingType) {
+                if (RatingType.hasOwnProperty(property)) {
+                    let propertyValue = RatingType[property];
+                    if(typeof ratings[propertyValue] === 'undefined') {
                         ratings[propertyValue] = null;
                     }
                 }
