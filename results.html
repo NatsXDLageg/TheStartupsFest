@@ -23,14 +23,14 @@
             <h2 class="w3-center">Resultados</h2>
         </div>
         <div v-if="loading" class="loading">Loading&#8230;</div>
-        <div v-for="(ratingType, i) of ratingTypes">
+        <div v-for="(ratingType, i) of ratingTypes" class="w3-margin-top">
             <div class="w3-padding-16 rating-type-title">
                 {{ratingType.name}}
             </div>
             <div v-for="(startUpRating, j) of ratingType.podium" class="w3-row-padding w3-margin-bottom w3-col l4 m4 s12">
-                <div class="w3-col s1 rating-startup-number">{{j + 1}}º</div>
-                <div class="w3-col s3"><img v-bind:src="startUpRating.imageUrl" class="rating-startup-img"/></div>
-                <div class="w3-rest">
+                <div class="w3-col s1 w3-padding rating-startup-number">{{j + 1}}º</div>
+                <div class="w3-col s4 w3-padding"><img v-bind:src="startUpRating.imageUrl" class="rating-startup-img"/></div>
+                <div class="w3-rest w3-padding">
                     <div class="rating-startup-title">{{startUpRating.name}}</div>
                     <div class="rating-startup-subtitle">{{startUpRating.segment}}</div>
                     <div class="rating-startup-rating">{{startUpRating.rating}}</div>

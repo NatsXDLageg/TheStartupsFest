@@ -119,14 +119,16 @@ function loadRatingPodium() {
     ratingRef.on('value', function (el) {
         if (el.val() !== null) {
             let registeredRatingsInfo = el.val();
-            console.log('registeredRatingsInfo');
-            console.log(registeredRatingsInfo);
 
             let startUpsInfo = results.allStartups;
-            console.log('startUpsInfo');
-            console.log(startUpsInfo);
 
-            let startUpsWithoutRatings = [];
+            let ratingTypesLabels = {
+                PROPOSAL: 'Proposta',
+                PITCH: 'Apresentação / Pitch',
+                DEVELOPMENT: 'Desenvolvimento'
+            }
+            let startUpsWithRatings = [];
+            let startUpsForRatingTypeSet = [];
 
             //Have to iterate over 3 sets of objects: rating types, rating data from Firebase and data returned by Apollo
             for(let startUpInfo of startUpsInfo) {
@@ -135,7 +137,7 @@ function loadRatingPodium() {
                     name: startUpInfo.name,
                     segment: startUpInfo.Segment.name
                 };
-                startUpsWithoutRatings.push(startUp);
+                startUpsWithRatings.push(startUp);
             }
 
             // For:
@@ -145,41 +147,42 @@ function loadRatingPodium() {
             for(let ratingTypeKey in RatingType) {
                 if (RatingType.hasOwnProperty(ratingTypeKey)) {
                     let ratingTypeValue = RatingType[ratingTypeKey];
-                    console.log(ratingTypeValue);
 
                     // For each startUp that have registered ratings
                     for(let registeredRatingKey in registeredRatingsInfo) {
                         let registeredRatingValue = registeredRatingsInfo[registeredRatingKey]
-                        let startUp = startUpsWithoutRatings.find(x => encodePath(x.name) === registeredRatingKey);
+                        let startUp = startUpsWithRatings.find(x => encodePath(x.name) === registeredRatingKey);
 
                         if(startUp != null) {
                             startUp.rating = 0;
-                            console.log('startUp');
-                            console.log(startUp);
+                            let count = 0;
                             // For each user rating (for all startUps)
                             for(let registeredUserRatingKey in registeredRatingValue) {
                                 let registeredUserRatingValue = registeredRatingValue[registeredUserRatingKey];
-                                console.log('registeredUserRatingValue');
-                                console.log(registeredUserRatingValue);
                                 startUp.rating = startUp.rating + registeredUserRatingValue[ratingTypeValue];
-                                console.log('startUp.rating');
-                                console.log(startUp.rating);
+                                count++;
                             }
+                            startUp.rating = startUp.rating / parseFloat(count);
+                            startUp.rating = '' + startUp.rating.toFixed(1);
+                            startUp.rating = startUp.rating.replace('.', ',');
                         }
                     }
+                    // Easiest way I found to clone a object
+                    let startUpsForRatingType = JSON.parse(JSON.stringify(startUpsWithRatings));
 
-                    // let newElement = {
-                    //      imageUrl: 'https://www.eaalim.com/download/wp-content/uploads/2014/01/hellfire.jpg',
-                    //      name: 'Nome da Startup',
-                    //      segment: 'Ctgr',
-                    //      rating: 5,
-                    // };
-                    // podiumStartups.push(newElement);
+                    // Sorts by ratings
+                    startUpsForRatingType.sort(function(a, b){
+                        return b.rating - a.rating;
+                    });
 
-                    console.log(startUpsWithoutRatings);
-                    // results.ratingTypes[property].podium = startUpsWithRatings;
+                    startUpsForRatingTypeSet.push({
+                        name: ratingTypesLabels[ratingTypeKey],
+                        podium: startUpsForRatingType.slice(0, 3)
+                    });
                 }
             }
+
+            results.ratingTypes = startUpsForRatingTypeSet;
         }
 
         results.loading = 0;
